@@ -2,6 +2,7 @@
 
 <PropertyList include="shuttle-jsbsim-set.xml">
  <sim>
+   <exclude type="bool">true</exclude>
   <description>Alias for shuttle-jsbsim.</description>
  </sim>
 </PropertyList>

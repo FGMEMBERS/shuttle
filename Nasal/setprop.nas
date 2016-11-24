@@ -12,7 +12,7 @@ setlistener("/tu154/switches/usvp-selector-trans", func
       }
       else
       {
-        setprop("/tu154/instrumentation/usvp/air_ground_speed_kt", getprop("/velocities/airspeed-kt"));
+        setprop("/tu154/instrumentation/usvp/air_ground_speed_kt", getprop("/instrumentation/airspeed-indicator/true-speed-kt"));
       }  
   }
   );
@@ -200,3 +200,29 @@ var timerChute = maketimer(0.4, func
 );
 timerChute.start();
 
+########################################################################################
+
+var gearstate = 0;
+
+setlistener("gear/gear/position-norm", func
+  { if (getprop("gear/gear/position-norm") == 1)
+    { gearstate = 0 ;}
+    if (getprop("gear/gear/position-norm") < 1)
+    { gearstate = 1 ;}
+    if (getprop("gear/gear/position-norm") == 0)
+    { gearstate = 0 ;}
+    setprop("gear/state", gearstate)
+  }
+);
+
+setprop("gear/warning", 0);
+
+
+var gearwarning = maketimer(0.5, func { 
+
+if ((getprop("gear/gear/position-norm") == 0) and (getprop("/position/altitude-agl-ft") < 350) and (getprop("fdm/jsbsim/environment/terrain-solid") == 1))
+    {setprop("gear/warning", 1);}
+      else setprop("gear/warning", 0)
+ });
+
+gearwarning.start();
